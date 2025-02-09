@@ -1,45 +1,40 @@
-from MVC import controller
-from MVC import model
-from MVC import viwe
+from MVC_Module_2 import controller
+from MVC_Module_2 import model
+from MVC_Module_2 import viwe
 
 def main():
-    mod = model.Timetable()
-    control = controller.TimetamleController(mod)
-    vi = viwe.TimeViwe(control)
+    mod = model.Recipe()
+    control = controller.RecipeController(mod)
+    vi = viwe.RecipeView(control)
 
-    vi.display_def_action()
+    vi.display_default_action()
 
     while True:
         print("\nВыберите действие:")
-        print("1. Просмотреть расписание (авторизация)")
-        print("2. Просмотреть все курсы и даты")
-        print("3. Добавить курс (авторизация)")
-        print("4. Изменить дату курса (авторизация)")
-        print("5. Выход")
+        print("1. Посмотреть рецепты (авторизация)")
+        print("2. Добавить рецепт (авторизация)")
+        print("3. Exit")
 
-        choice = input("Ваш выбор: ")
+        choice = input("Ваш выбор:")
 
         if choice == '1':
-            role = input("Введите вашу роль (guest, is_staff, is_superpuper, user_owner): ")
-            vi.display_times_auth(role)
+            role = input("Введите свою роль (guest, is_staff, is_superpuper, user_owner): ")
+            vi.display_recipes_auth(role)
         elif choice == '2':
-            vi.display_all_times()
+            role = input("Введите свою роль (guest, is_staff, is_superpuper, user_owner): ")
+            name = input("Название рецепта: ")
+            author = input("Автор: ")
+            recipe_type = input("Тип рецепта (первый, второй и т.д.): ")
+            description = input("Описание:")
+            ingredients = input("Ингредиенты (через запятую):").split(", ")
+            cuisine = input("Кухня: ")
+            youtube_link = input("Ссылка на YouTube (необязательно):")
+            file_name = input("Имя файла для сохранения:")
+            vi.post_add_recipe_auth(name, author, recipe_type, description, ingredients, cuisine, youtube_link, file_name, role)
         elif choice == '3':
-            role = input("Введите вашу роль (guest, is_staff, is_superpuper, user_owner): ")
-            course = input("Название курса: ")
-            month_day = input("Дата (например, 15 Марта): ")
-            file_name = input("Имя файла для сохранения: ")
-            vi.post_add_time_auth(course, month_day, file_name, role)
-        elif choice == '4':
-            role = input("Введите вашу роль (guest, is_staff, is_superpuper, user_owner): ")
-            course = input("Название курса: ")
-            month_day = input("Новая дата (например, 20 Апреля): ")
-            file_name = input("Имя файла для сохранения: ")
-            vi.post_update_time_course_auth(course, month_day, file_name, role)
-        elif choice == '5':
             break
         else:
-            print("Неверный выбор.")
+            print("Invalid choice.")
 
 if __name__ == "__main__":
     main()

@@ -1,47 +1,30 @@
-class TimeViwe:
-    fob = "Fobidden"
-    def __init__(self,controller):
+class RecipeView:
+    fob = "Forbidden"
+
+    def __init__(self, controller):
         self.controller = controller
-        
-    
-    def display_def_action(self):
+
+    def display_default_action(self):
         print(self.controller.get_default_action())
-    
-    def display_times_auth (self, role = 'guest'):
-        result = self.controller.get_times_auth(role)
+
+    def display_recipes_auth(self, role='guest'):
+        """ Отобразить список рецептов с проверкой прав доступа. """
+        result = self.controller.get_recipes_auth(role)
         if result == self.fob:
             print(self.fob)
             return
         if result:
-            for item in result:
-                print(f'Курс - {item['course']}: {item['mounthDay']}')
+            for recipe in result:
+                print(f'Рецепт: {recipe["name"]}, Автор: {recipe["author"]}, Тип: {recipe["recipe_type"]}')
             return
-        print('В базе нет данных о расписании.')
-        return
+        print('Рецептов нет.')
     
-    def display_all_times(self):
-        courses, mounthDays = self.controller.get_all_times()
-        if courses and mounthDays:
-            print('Расписание курсов:')
-            for i in range(len(courses)):
-                print(f'{courses[i]}: {mounthDays[i]}')
-            return
-        print('Расписание занятий - не запланированно.')
-    
-    def post_add_time_auth (self, course, mounthDay, fileName, role = 'guest'):
-        result = self.controller.add_time_auth(course, mounthDay, fileName, role)
+    def post_add_recipe_auth(self, name, author, recipe_type, description, ingredients, cuisine, youtube_link, file_name, role='guest'):
+        """ Добавить рецепт с проверкой прав доступа. """
+        result = self.controller.add_recipe_auth(name, author, recipe_type, description, ingredients, cuisine, youtube_link, file_name, role)
         if result == True:
-            print(f'Курс - {course}: {mounthDay} успешно добавлен.')
+            print(f'Рецепт "{name}" от {author} успешно добавлен.')
         elif result == False:
-            print(f'Курс с наименованием - {course}, уже существует.')
-        elif result == self.fob:
-            print("У вас недостаточно прав доступа.")        
-    
-    def post_update_time_course_auth (self, course, mounthDay, fileName, role = 'guest'):
-        result = self.controller.update_time_course_auth(course, mounthDay, fileName, role)
-        if result == True:
-            print(f'Изменения успешно внесены, у {course} сменилась дата на {mounthDay}.')
-        elif result == False:
-            print(f'К сожелению данного курса - {course} нет в программе.')
+            print(f'Рецепт "{name}" уже существует.')
         elif result == self.fob:
             print("У вас недостаточно прав доступа.")
