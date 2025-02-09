@@ -1,61 +1,35 @@
-class TimetamleController:
-    fob = "Fobidden"
-    user_owner = ['is_superpuper', 'is_staff','user_owner']
+class ShoeController:
+    fob = "Forbidden"
+    user_owner = ['is_superpuper', 'is_staff', 'user_owner']
     is_staff = ['is_superpuper', 'is_staff']
     is_superpuper = ['is_superpuper']
-    errorValue = "Не верный тип данных - "
-    
-    def __init__ (self,model):
+    error_value = "Неверный тип данных - "
+
+    def __init__(self, model):
         self.model = model
-    
-    def get_default_action (self):
-        return "Добро пожаловать на страницу расписания курсов."
-    
-    def get_times_auth (self, role = 'guest'):
+
+    def get_default_action(self):
+        return "Добро пожаловать в магазин обуви."
+
+    def get_shoes_auth(self, role='guest'):
         if role in self.user_owner:
-            if self.model.get_times():
-                return self.model.get_times()
+            if self.model.get_shoes():
+                return self.model.get_shoes()
             return
         return self.fob
 
-    def get_only_curse_list(self):
-        curses = []
-        data = self.model.get_times()
+    def get_only_shoe_types(self):
+        shoe_types = []
+        data = self.model.get_shoes()
         if data:
-            for el in data:
-                curses.append(el['course'])
-            return curses
-        return
-    
-    def get_only_mounthDay_list(self):
-        mounthDay = []
-        data = self.model.get_times()
-        if data:
-            for el in data:
-                mounthDay.append(el['mounthDay'])
-            return mounthDay
-        return
-    
-    def get_all_times(self):
-        data = self.model.get_times()
-        if data:
-            return self.get_only_curse_list(),self.get_only_mounthDay_list()
+            for shoe in data:
+                shoe_types.append(shoe['type'])
+            return shoe_types
         return
 
-    def add_time_auth (self, course, mounthDay, fileName, role = 'guest'):
-        if role not in self.is_superpuper:
+    def add_shoe_auth(self, shoe_type, shoe_kind, color, price, manufacturer, size, file_name, role='guest'):
+        if role not in self.is_superpuper and role not in self.is_staff:
             return self.fob
-        elif not isinstance(course,str):
-            return self.errorValue + str(course)
-        elif not isinstance(mounthDay,str):
-            return self.errorValue + str(mounthDay)
-        return self.model.add_time(course, mounthDay, fileName)
+        return self.model.add_shoe(shoe_type, shoe_kind, color, price, manufacturer, size, file_name)
 
-    def update_time_course_auth (self, course, mounthDay, fileName, role = 'guest'):
-        if role not in self.is_staff:
-            return self.fob
-        elif not isinstance(course,str):
-            return self.errorValue + str(course)
-        elif not isinstance(mounthDay,str):
-            return self.errorValue + str(mounthDay)
-        return self.model.update_time_course(course, mounthDay, fileName)
+

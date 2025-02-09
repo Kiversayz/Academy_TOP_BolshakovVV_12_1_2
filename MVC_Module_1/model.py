@@ -1,62 +1,49 @@
 import json
 
-class Timetable:
-    
+class Shoe:
     def __init__(self):
-        """ Создание класса с контейнером для хранения данных. """
-        self.__times = []
-    
-    def get_times (self):
-        """ Получить список данных. """
-        return self.__times
-    
-    def add_time (self, course, mounthDay, fileName ):
-        """ Добавить курс {course} с датой {mounthDay} и наименование файла сохранения (fileName) """
-        if not self.check_course(course):
-            data = {}
-            data['course'] = course
-            data['mounthDay'] = mounthDay
-            self.__times.append(data)
-            self.update_json(fileName)
+        """Создание класса для хранения данных об обуви."""
+        self.__shoes = []
+
+    def get_shoes(self):
+        """Получить список всех обувных товаров."""
+        return self.__shoes
+
+    def add_shoe(self, shoe_type, shoe_kind, color, price, manufacturer, size, file_name):
+        """Добавить обувь в список."""
+        if not self.check_shoe(shoe_type, shoe_kind, size):
+            data = {
+                'type': shoe_type,
+                'kind': shoe_kind,
+                'color': color,
+                'price': price,
+                'manufacturer': manufacturer,
+                'size': size
+            }
+            self.__shoes.append(data)
+            self.update_json(file_name)
             return True
         else:
-            return False 
-    
-    def check_course (self, course):
-        for i in range(len(self.__times)):
-            if self.__times[i]['course'] == str(course):
+            return False
+
+    def check_shoe(self, shoe_type, shoe_kind, size):
+        """Проверка, существует ли обувь с такими характеристиками."""
+        for shoe in self.__shoes:
+            if shoe['type'] == shoe_type and shoe['kind'] == shoe_kind and shoe['size'] == size:
                 return True
         return False
-    
-    def update_time_course (self,course, mounthDay,fileName):
-        """ Изменить дату {mounthDay} у определенного курса {course}. {fileName} - Имя файла
-        Возвращает измененную дату курса.
-        Если нет, то в ответе будет None. """
-        for i in range(len(self.__times)):
-            if self.__times[i]['course'] == str(course):
-                dataLast = self.__times[i]['mounthDay']
-                self.__times[i]['mounthDay'] = str(mounthDay)
-                self.update_json(fileName)
-                return True
-        return False
-    
-    
-    def update_json (self, fileName):
-        fullFaleName = fr'MVC\file\{fileName}_curseTime.json'
-        """ Создание файла с наименованем пользователя, и всеми данными о курсах и датах. """
-        with open(fullFaleName,'w', encoding='utf-8') as fp:
-            json.dump(self.__times,fp, ensure_ascii=False,indent=4)
-            
+
+    def update_json(self, file_name):
+        """Обновить файл с данными об обуви."""
+        full_file_name = fr'MVC_Module_1\file\{file_name}_shoe_data.json'
+        with open(full_file_name, 'w', encoding='utf-8') as fp:
+            json.dump(self.__shoes, fp, ensure_ascii=False, indent=4)
+
 if __name__ == '__main__':
-    timeTable = Timetable()
-    
-    userName = input('Введите свое имя: ')
-    curse1 = timeTable.add_time('HTML', '20 Феврала', userName)
-    curse2 = timeTable.add_time('CSS', '16 Октября', userName)
-    curse3 = timeTable.add_time('Python', '3 Сентября', userName)
-    urse3 = timeTable.add_time('Python', '13 Сентября', userName)
-    
-    timeTable.update_time_course('HTML','33 Декабря', userName)
-    timeTable.update_time_course('HРML','33 Декабря', userName)
-    
-    print(timeTable.get_times())
+    shoe_model = Shoe()
+
+    shoe_model.add_shoe('Мужская', 'Кроссовки', 'Черный', 5000, 'Nike', 42, 'shoes')
+    shoe_model.add_shoe('Женская', 'Сапоги', 'Красный', 8000, 'Adidas', 37, 'shoes')
+
+    print(shoe_model.get_shoes())
+
